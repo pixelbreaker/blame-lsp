@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
@@ -131,22 +132,22 @@ function ymdFromUnixSeconds(sec: number): string {
 function relativeFromUnixSeconds(sec: number, nowMs = Date.now()): string {
   const diffSec = Math.max(0, Math.floor((nowMs - sec * 1000) / 1000));
   if (diffSec < 10) return "just now";
-  if (diffSec < 60) return `${diffSec} secs ago`;
+  if (diffSec < 60) return `${diffSec} sec${diffSec > 1 ? "s" : ""} ago`;
 
   const mins = Math.floor(diffSec / 60);
-  if (mins < 60) return `${mins} mins ago`;
+  if (mins < 60) return `${mins} min${mins > 1 ? "s" : ""} ago`;
 
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours} hours ago`;
+  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
 
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days} days ago`;
+  if (days < 30) return `${days} day${days > 1 ? "s" : ""} ago`;
 
   const months = Math.floor(days / 30);
-  if (months < 12) return `${months} months ago`;
+  if (months < 12) return `${months} month${months > 1 ? "s" : ""} ago`;
 
   const years = Math.floor(days / 365);
-  return `${years} years ago`;
+  return `${years} year${years > 1 ? "s" : ""} ago`;
 }
 
 function parseBlamePorcelain(porcelain: string): BlameInfo | null {
@@ -216,14 +217,15 @@ async function blameSingleLineCached(
 
 function formatBlameLabel(info: BlameInfo): string {
   const author = info.author ?? "Unknown author";
-  const hash = shortHash(info.commit);
+  // const hash = shortHash(info.commit);
+  const message = info.summary?.substring(0, 80);
 
   const when =
     typeof info.authorTime === "number"
-      ? `${relativeFromUnixSeconds(info.authorTime)} (${ymdFromUnixSeconds(info.authorTime)})`
+      ? `${relativeFromUnixSeconds(info.authorTime)}` // (${ymdFromUnixSeconds(info.authorTime)})`
       : "unknown date";
 
-  return `${author} · ${hash} · ${when}`;
+  return `⎇ ${author}, ${when} · ${message} ↗`;
 }
 
 function normaliseRemoteToHttps(remote: string): string | null {
@@ -316,7 +318,7 @@ connection.onCodeAction(
     const info = await blameSingleLineCached(filePath, oneBasedLine);
     if (!info) return [];
 
-    const title = `${formatBlameLabel(info)} ↗`;
+    const title = `${formatBlameLabel(info)}`;
 
     return [
       {
