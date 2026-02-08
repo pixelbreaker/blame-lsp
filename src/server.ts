@@ -215,14 +215,19 @@ async function blameSingleLineCached(
   return info;
 }
 
-function formatBlameLabel(info: BlameInfo): string {
-  const author = info.author ?? "Unknown author";
+function formatBlameLabel({
+  author = "Unknown author",
+  authorTime,
+  summary = "",
+}: BlameInfo): string {
   // const hash = shortHash(info.commit);
-  const message = info.summary?.substring(0, 80);
+  const maxLen = 60;
+  const message =
+    summary.length > maxLen ? `${summary?.substring(0, 80)}…` : summary;
 
   const when =
-    typeof info.authorTime === "number"
-      ? `${relativeFromUnixSeconds(info.authorTime)}` // (${ymdFromUnixSeconds(info.authorTime)})`
+    typeof authorTime === "number"
+      ? `${relativeFromUnixSeconds(authorTime)}` // (${ymdFromUnixSeconds(info.authorTime)})`
       : "unknown date";
 
   return `⎇ ${author}, ${when} · ${message} ↗`;
@@ -291,10 +296,9 @@ async function openUrlOrShow(url: string) {
 connection.onInitialize(
   (): InitializeResult => ({
     capabilities: {
-      hoverProvider: true,
       codeActionProvider: true,
       executeCommandProvider: { commands: [CMD_OPEN] },
-      textDocumentSync: TextDocumentSyncKind.Full,
+      textDocumentSync: TextDocumentSyncKind.Incremental,
     },
   }),
 );
