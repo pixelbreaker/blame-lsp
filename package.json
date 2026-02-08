@@ -7,6 +7,10 @@
   "bin": {
     "blame-lsp": "dist/server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixelbreaker/blame-lsp.git"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js"
