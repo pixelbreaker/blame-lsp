@@ -2,8 +2,8 @@
 
 A simple Git Blame Language Server for use in the Helix editor.
 
-A tiny Language Server (LSP) that shows git blame info on hover:
-Author — short hash — relative date (YYYY-MM-DD)
+A tiny Language Server (LSP) that shows git blame info on code actions
+`⎇ ${author}, ${when} · ${message} ↗`
 
 ## Motivation
 Pretty much the only thing I miss after moving away from the noisy environment in VSCode and Zed (How many AI popups do we need?) is Gitlens. 
@@ -37,7 +37,7 @@ auto-format = true
 
 The order you add it is signiticant. In this case I have it at the end so it appears as the last item in the code actions menu, if you put it first it will be first.
 
-## Install & build
+## Install & build locally
 
 ```bash
 npm i
