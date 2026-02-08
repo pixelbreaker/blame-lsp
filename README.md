@@ -12,7 +12,7 @@ Pretty much the only thing I miss after moving away from the noisy environment i
 You need to add the LSP to you languages config, usually located in `~/.config/helix/languages.toml`.
 
 Define the server
-```
+```toml
 [language-server.blame-lsp]
 command = "blame-lsp"
 args = ["--stdio"]
@@ -20,7 +20,7 @@ args = ["--stdio"]
 ```
 
 Then for all languages you want Blame-LSP add it as a server
-```
+```toml
 [[language]]
 name = "javascript"
 language-servers = ["eslint", "typescript-language-server", "blame-lsp"]
