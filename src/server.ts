@@ -220,7 +220,7 @@ function formatBlameLabel({
   authorTime,
   summary = "",
 }: BlameInfo): string {
-  // const hash = shortHash(info.commit);
+  // const hash = shortHash(commit);
   const maxLen = 60;
   const message =
     summary.length > maxLen ? `${summary?.substring(0, 80)}…` : summary;
@@ -274,8 +274,7 @@ function buildFileUrl(
   const p = relPath.split(path.sep).join("/"); // windows-safe
   const encPath = p.split("/").map(encodeURIComponent).join("/");
 
-  // GitHub / GitLab / Bitbucket all accept /blob/<ref>/<path>#L<n> (Bitbucket uses #lines-<n> sometimes,
-  // but #L<n> works for GitHub/GitLab; we’ll use #L for simplicity)
+  // GitHub / GitLab / Bitbucket all accept /blob/<ref>/<path>#L<n>
   return `${base}/blob/${encodeURIComponent(commit)}/${encPath}#L${oneBasedLine}`;
 }
 
@@ -304,7 +303,6 @@ connection.onInitialize(
 );
 
 documents.onDidSave(() => {
-  // simplest: drop cache (keying already invalidates, but this keeps memory tidy)
   lineCache.clear();
 });
 
@@ -316,7 +314,6 @@ connection.onCodeAction(
     const filePath = uriToFsPath(doc.uri);
     if (!filePath) return [];
 
-    // Use start line of the selection/range
     const oneBasedLine = params.range.start.line + 1;
 
     const info = await blameSingleLineCached(filePath, oneBasedLine);
