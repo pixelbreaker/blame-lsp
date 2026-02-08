@@ -117,17 +117,17 @@ async function computeKey(
   return { root, rel, key };
 }
 
-function shortHash(full: string): string {
-  return full.slice(0, 7);
-}
+// function shortHash(full: string): string {
+//   return full.slice(0, 7);
+// }
 
-function ymdFromUnixSeconds(sec: number): string {
-  const d = new Date(sec * 1000);
-  const yyyy = d.getUTCFullYear();
-  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const dd = String(d.getUTCDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-}
+// function ymdFromUnixSeconds(sec: number): string {
+//   const d = new Date(sec * 1000);
+//   const yyyy = d.getUTCFullYear();
+//   const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+//   const dd = String(d.getUTCDate()).padStart(2, "0");
+//   return `${yyyy}-${mm}-${dd}`;
+// }
 
 function relativeFromUnixSeconds(sec: number, nowMs = Date.now()): string {
   const diffSec = Math.max(0, Math.floor((nowMs - sec * 1000) / 1000));
